@@ -121,7 +121,7 @@ public class Entry {
         String result = generateRate(processEngine);
 
         try {
-            FileWriter fw = new FileWriter(args[0] + "/result.txt");
+            FileWriter fw = new FileWriter(path + "result.txt");
             fw.write(result);
             fw.close();
         } catch (IOException e) {
