@@ -39,16 +39,43 @@ public class Entry {
         }
     }
 
+    private static String generateRate(DataProcessing processEngine) {
+        StringBuffer buf = new StringBuffer();
+
+        for (User testUser : processEngine.getTestUsers()) {
+            // K - trackId, V - rate
+            Map<Integer, Integer> allTracks = testUser.getTracks();
+            // trackId
+            List<Integer> testTracks = testUser.getTracksInTest();
+
+            int numRate[] = new int[testTracks.size()];
+            int i = 0;
+            for (Integer trackId : testTracks) {
+                numRate[i++] = allTracks.get(trackId);
+            }
+            Arrays.sort(numRate);
+
+            int threshold = numRate[2];
+
+            for (Integer trackId : testTracks) {
+                int rating = allTracks.get(trackId);
+                rating = rating > threshold ? 1 : 0;
+                buf.append(rating + "\n");
+            }
+        }
+
+        return buf.toString();
+    }
+
     public static void main(String[] args) {
         DataProcessing processEngine = new DataProcessing();
 
         // Test data set
         List<User> predictUserList = processEngine.getTestUsers();
+        Map<Integer, User> allUsersHistory = processEngine.getTrainUsers();
 
         for (User predictUser : predictUserList) {
-            Map<Integer, User> allUsersHistory = processEngine.getTrainUsers();
             User trainUser = allUsersHistory.get(predictUser.getId());
-
             if (trainUser == null) continue;
 
             // Get all tracks listened by this user
@@ -64,14 +91,10 @@ public class Entry {
                     continue;
                 }
 
-                Map<Integer, Track> allTracks = processEngine.getAllTracks();
-                Track track = allTracks.get(trackId);
-
+                Track track = processEngine.getAllTracks().get(trackId);
                 if (track == null) continue;
 
-                // Go to find Album
-                // TODO: By this id to find album
-
+                // Find in Album
                 Map<Integer, Integer> trainUserAlbums = trainUser.getAlbums();
                 int trackAlbumId = track.getAlbumId();
                 Integer albumRating = trainUserAlbums.get(trackAlbumId);
@@ -81,12 +104,9 @@ public class Entry {
                 Integer artistRating = trainUserArtists.get(trackArtistId);
 
                 if (albumRating != null) {
-                    // Rating for this album
                     List<Integer> allTracksInAlbum = processEngine.getAllAlbums().get(trackAlbumId).getTracks();
                     process(trackId, albumRating, predictUserTracksMap, allTracksInAlbum, trainUser);
-                }
-
-                else if (artistRating != null) {
+                } else if (artistRating != null) {
                     System.out.println("Sorry, the user never hear about this album, please search by Artist!");
                     List<Integer> allTracksOfArtist = processEngine.getALLArtists().get(track.getArtistId()).getTracks();
                     process(trackId, artistRating, predictUserTracksMap, allTracksOfArtist, trainUser);
@@ -97,48 +117,20 @@ public class Entry {
                     // TODO: GO TO find Genre by this track ID
                     track.getGenreId();
                 }
-
-
             }
-
 
         }
 
-        /**
-		 * Write the result to file
-		 */
-		try {
-			FileWriter fw=new FileWriter("result.txt");
-			List<User> usersInTest = processEngine.getTestUsers();
-			for(Iterator<User> iter = usersInTest.iterator(); iter.hasNext();) { 
-				User user = iter.next();
-				//int id = user.getId();
-				//fw.append(id+"\n");
-				TreeMap<Integer, Integer> tracksOfUser = user.getTracks();
-				List<Integer> tracksInTest = user.getTracksInTest();
-				int numRate[] = new int[6];
-				int k=0;
-				for(Iterator<Integer> it = tracksInTest.iterator(); it.hasNext();) { 
-					int trackIdInList = it.next();
-					numRate[k++] = tracksOfUser.get(trackIdInList);
-				}
-				Arrays.sort(numRate);
-				for(Iterator<Integer> it = tracksInTest.iterator(); it.hasNext();) { 
-					int trackIdInList = it.next();
-					 if(tracksOfUser.get(trackIdInList)>numRate[2]){
-						 fw.append(1 + "\n");
-					 }else{
-						 fw.append(0 + "\n");
-					 }
-				}
-				
-				
-			}
-			fw.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}		
+        String result = generateRate(processEngine);
+
+        try {
+            FileWriter fw = new FileWriter("result.txt");
+            fw.write(result);
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 
 }
