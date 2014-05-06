@@ -27,13 +27,11 @@ public class Entry {
         }
         if (totalTrackNum != 0) {
             int avgRating = totalRating / totalTrackNum;
-
             predictUserTracksMap.put(trackId, avgRating);
-            System.out.println("This is the average rating - " + avgRating);
+            System.out.println("Average Rating: " + avgRating);
         } else {
-
-            System.out.println("Sorry, there is no other track listened by the user in this album, please search by Artist!");
-            System.out.println("And the only thing I have is the rating of Album by user - " + rating);
+            System.out.println("No track listened by the user in this album, please search by Artist!");
+            System.out.println("Rating of Album by user - " + rating);
             predictUserTracksMap.put(trackId, rating);
         }
     }
@@ -106,11 +104,11 @@ public class Entry {
                     List<Integer> allTracksInAlbum = processEngine.getAllAlbums().get(trackAlbumId).getTracks();
                     process(trackId, albumRating, predictUserTracksMap, allTracksInAlbum, trainUser);
                 } else if (artistRating != null) {
-                    System.out.println("Sorry, the user never hear about this album, please search by Artist!");
+                    System.out.println("The user never hear about this album, please search by Artist!");
                     List<Integer> allTracksOfArtist = processEngine.getALLArtists().get(track.getArtistId()).getTracks();
                     process(trackId, artistRating, predictUserTracksMap, allTracksOfArtist, trainUser);
                 } else {
-                    System.out.println("Sorry, the user never hear about this artist, please search by Genre!");
+                    System.out.println("The user never hear about this artist, please search by Genre!");
                     predictUserTracksMap.put(trackId, -1); // -1 -> go to search genre
 
                     // TODO: GO TO find Genre by this track ID
