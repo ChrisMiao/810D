@@ -2,6 +2,7 @@ package entry;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -104,45 +105,40 @@ public class Entry {
         }
 
         /**
-         * Write the result to file
-         */
-        try {
-            FileWriter fw = new FileWriter("result1.txt");
-            List<User> usersInTest = processEngine.getTestUsers();
-            for (User user : usersInTest) {
-                // int id = user.getId();
-                // fw.append(id+"\n");
-                TreeMap<Integer, Integer> tracksOfUser = user.getTracks();
-                List<Integer> tracksInTest = user.getTracksInTest();
-                int numRate[] = new int[6];
-                // rating
-                for (int i = 0; i < 6; i++) {
-                    Iterator<Integer> it = tracksInTest.iterator();
-                    int trackId = it.next();
-                    int rating = tracksOfUser.get(trackId);
-                    numRate[i] = rating;
-                }
-                // �Ը�ֵ���������з��࣬process the rating numbers;
-                /**
-                 * for(int i = 0; i < 6; i++){ int count = 1; for(int j = 0; j <
-                 * 6; j++){
-                 *
-                 * if(numRate[j] > numRate[i]){ count++; } } if(count >= 4){
-                 * numRate[i] = 0; } else{ numRate[i] = 1; }
-                 *
-                 * }
-                 */
-                for (int j = 0; j < 6; j++) {
-                    fw.append(numRate[j] + "\n");
-                }
-
-            }
-
-            fw.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
+		 * Write the result to file
+		 */
+		try {
+			FileWriter fw=new FileWriter("result.txt");
+			List<User> usersInTest = processEngine.getTestUsers();
+			for(Iterator<User> iter = usersInTest.iterator(); iter.hasNext();) { 
+				User user = iter.next();
+				//int id = user.getId();
+				//fw.append(id+"\n");
+				TreeMap<Integer, Integer> tracksOfUser = user.getTracks();
+				List<Integer> tracksInTest = user.getTracksInTest();
+				int numRate[] = new int[6];
+				int k=0;
+				for(Iterator<Integer> it = tracksInTest.iterator(); it.hasNext();) { 
+					int trackIdInList = it.next();
+					numRate[k++] = tracksOfUser.get(trackIdInList);
+				}
+				Arrays.sort(numRate);
+				for(Iterator<Integer> it = tracksInTest.iterator(); it.hasNext();) { 
+					int trackIdInList = it.next();
+					 if(tracksOfUser.get(trackIdInList)>numRate[2]){
+						 fw.append(1 + "\n");
+					 }else{
+						 fw.append(0 + "\n");
+					 }
+				}
+				
+				
+			}
+			fw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}		
 
 }
