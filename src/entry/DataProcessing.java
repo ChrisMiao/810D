@@ -22,37 +22,37 @@ public class DataProcessing {
 
         System.out.print("Loading data genreData2.txt...");
         start = System.currentTimeMillis();
-        loadDataGenre(path + "/genreData2.txt");
+        loadDataGenre(path + "genreData2.txt");
         end = System.currentTimeMillis();
         System.out.println((end - start) + " millisec");
 
         System.out.print("Loading data artistData2.txt...");
         start = System.currentTimeMillis();
-        loadDataArtist(path + "/artistData2.txt");
+        loadDataArtist(path + "artistData2.txt");
         end = System.currentTimeMillis();
         System.out.println((end - start) + " millisec");
 
         System.out.print("Loading data albumData2.txt...");
         start = System.currentTimeMillis();
-        loadDataAlbum(path + "/albumData2.txt");
+        loadDataAlbum(path + "albumData2.txt");
         end = System.currentTimeMillis();
         System.out.println((end - start) + " millisec");
 
         System.out.print("Loading data trackData2.txt...");
         start = System.currentTimeMillis();
-        loadDataTrack(path + "/trackData2.txt");
+        loadDataTrack(path + "trackData2.txt");
         end = System.currentTimeMillis();
         System.out.println((end - start) + " millisec");
 
         System.out.print("Loading data trainIdx2.txt...");
         start = System.currentTimeMillis();
-        loadDataTrain(path + "/trainIdx2.txt");
+        loadDataTrain(path + "trainIdx2.txt");
         end = System.currentTimeMillis();
         System.out.println((end - start) + " millisec");
 
         System.out.print("Loading data testIdx2.txt...");
         start = System.currentTimeMillis();
-        loadDataTest(path + "/testIdx2.txt");
+        loadDataTest(path + "testIdx2.txt");
         end = System.currentTimeMillis();
         System.out.println((end - start) + " millisec");
 

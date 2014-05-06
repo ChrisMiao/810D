@@ -65,7 +65,7 @@ public class Entry {
     }
 
     public static void main(String[] args) {
-        String path = args.length > 0 ? args[0] : "";
+        String path = args.length > 0 ? args[0] + "/" : "";
         DataProcessing processEngine = new DataProcessing(path);
 
         // Test data set
