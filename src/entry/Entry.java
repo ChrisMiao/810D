@@ -65,7 +65,7 @@ public class Entry {
     }
 
     public static void main(String[] args) {
-        DataProcessing processEngine = new DataProcessing();
+        DataProcessing processEngine = new DataProcessing(args[0]);
 
         // Test data set
         List<User> predictUserList = processEngine.getTestUsers();
@@ -75,8 +75,7 @@ public class Entry {
             User trainUser = allUsersHistory.get(predictUser.getId());
             if (trainUser == null) continue;
 
-            // Get all tracks listened by this user
-            // id, rating
+            // Get all tracks listened by this user id, rating
             Map<Integer, Integer> trainUserTracksMap = trainUser.getTracks();
             Map<Integer, Integer> predictUserTracksMap = predictUser.getTracks();
 
@@ -121,7 +120,7 @@ public class Entry {
         String result = generateRate(processEngine);
 
         try {
-            FileWriter fw = new FileWriter("result.txt");
+            FileWriter fw = new FileWriter(args[0] + "/result.txt");
             fw.write(result);
             fw.close();
         } catch (IOException e) {
